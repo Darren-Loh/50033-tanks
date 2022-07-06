@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class TankMovement : MonoBehaviour
 {
@@ -96,4 +97,16 @@ public class TankMovement : MonoBehaviour
         Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
         m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
     }
+
+            void OnTriggerEnter(Collider col)
+        {
+            if (col.gameObject.CompareTag("MovementPowerup")){
+                m_Speed *= 2;
+                StartCoroutine(removeEffect());
+            }
+        }
+        IEnumerator  removeEffect(){
+		yield  return  new  WaitForSeconds(5.0f);
+		m_Speed  /=  2;
+	}
 }

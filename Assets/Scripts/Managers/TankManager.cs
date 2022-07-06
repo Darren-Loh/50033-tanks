@@ -51,6 +51,21 @@ public class TankManager
 
         for (int i = 0; i < renderers.Length; i++) renderers[i].material.color = m_PlayerColor;
     }
+        public void SetupTutorialTank()
+    {
+        m_Movement = m_Instance.GetComponent<TankMovement>();
+        m_Shooting = m_Instance.GetComponent<TankShooting>();
+        m_CanvasGameObject = m_Instance.GetComponentInChildren<Canvas>().gameObject;
+
+        // m_Movement.m_PlayerNumber = m_PlayerNumber;
+        // m_Shooting.m_PlayerNumber = m_PlayerNumber;
+
+        m_ColoredPlayerText = $"<color=#{ColorUtility.ToHtmlStringRGB(m_PlayerColor)}>PLAYER {m_PlayerNumber}</color>";
+
+        MeshRenderer[] renderers = m_Instance.GetComponentsInChildren<MeshRenderer>();
+
+        for (int i = 0; i < renderers.Length; i++) renderers[i].material.color = m_PlayerColor;
+    }
 
     public void DisableControl()
     {

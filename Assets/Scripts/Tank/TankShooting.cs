@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class TankShooting : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class TankShooting : MonoBehaviour
     private float m_ChargeSpeed;
     private bool m_Fired;
     private float nextFireTime;
+    private float inputFireRate = 1;
 
     private void OnEnable()
     {
@@ -41,7 +43,7 @@ public class TankShooting : MonoBehaviour
         if (m_CurrentLaunchForce >= m_MaxLaunchForce && !m_Fired)
         {
             m_CurrentLaunchForce = m_MaxLaunchForce;
-            Fire(m_CurrentLaunchForce, 1);
+            Fire(m_CurrentLaunchForce, inputFireRate);
         }
         else if (Input.GetButtonDown(m_FireButton))
         {
@@ -58,7 +60,7 @@ public class TankShooting : MonoBehaviour
         }
         else if (Input.GetButtonUp(m_FireButton) && !m_Fired)
         {
-            Fire(m_CurrentLaunchForce, 1);
+            Fire(m_CurrentLaunchForce, inputFireRate);
         }
     }
 
@@ -79,5 +81,16 @@ public class TankShooting : MonoBehaviour
 
         m_CurrentLaunchForce = m_MinLaunchForce;
     }
+                void OnTriggerEnter(Collider col)
+        {
+            if (col.gameObject.CompareTag("AttackPowerup")){
+                inputFireRate = 0;
+                StartCoroutine(removeEffect());
+            }
+        }
+        IEnumerator  removeEffect(){
+		yield  return  new  WaitForSeconds(5.0f);
+		inputFireRate  =  1;
+	}
     
 }

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class TankHealth : MonoBehaviour
 {
@@ -13,7 +15,9 @@ public class TankHealth : MonoBehaviour
     private AudioSource m_ExplosionAudio;          
     private ParticleSystem m_ExplosionParticles;   
     private float m_CurrentHealth;  
-    private bool m_Dead;            
+    private bool m_Dead; 
+    public int isTutorial;           
+    private bool isShielded = false;
 
 
     private void Awake()
@@ -35,11 +39,14 @@ public class TankHealth : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        if (isShielded == false){
         // Adjust the tank's current health, update the UI based on the new health and check whether or not the tank is dead.
         m_CurrentHealth -= amount;
 
         SetHealthUI();
         if (m_CurrentHealth <= 0f && !m_Dead) OnDeath();
+        }
+
     }
 
 
@@ -62,5 +69,28 @@ public class TankHealth : MonoBehaviour
         m_ExplosionAudio.Play();
 
         gameObject.SetActive(false);
+        if (isTutorial == 1){
+            SceneManager.LoadScene("Tutorial");
+        }
     }
+        void OnTriggerEnter(Collider col)
+        {
+            if (col.gameObject.CompareTag("HealthPowerup")){
+                if (m_CurrentHealth + 50f > m_StartingHealth){
+                    m_CurrentHealth = m_StartingHealth;
+                }else{
+                    m_CurrentHealth += 50f;
+                }
+                
+                SetHealthUI();
+            } else if (col.gameObject.CompareTag("ShieldPowerup")){
+                isShielded = true;
+                StartCoroutine(removeEffect());
+            }
+
+        }
+        IEnumerator  removeEffect(){
+		yield  return  new  WaitForSeconds(5.0f);
+		isShielded = false;
+	}
 }

@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviour
     private WaitForSeconds m_StartWait;         
     private WaitForSeconds m_EndWait;           
     private TankManager m_RoundWinner;          
-    private TankManager m_GameWinner;           
+    private TankManager m_GameWinner;        
+    public GameObject[] poweruplst;    
 
 
     private void Start()
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(RoundPlaying());
         yield return StartCoroutine(RoundEnding());
 
-        if (m_GameWinner != null) SceneManager.LoadScene(0);
+        if (m_GameWinner != null) SceneManager.LoadScene("Tutorial");
         else StartCoroutine(GameLoop());
     }
 
@@ -79,6 +80,13 @@ public class GameManager : MonoBehaviour
     {
         ResetAllTanks();
         DisableTankControl();
+
+        for (int i =0;i<=m_RoundNumber;i++){
+            if(m_RoundNumber < poweruplst.Length){
+                poweruplst[i].SetActive(true);
+            }
+            
+        }
 
         m_CameraControl.SetStartPositionAndSize();
 
